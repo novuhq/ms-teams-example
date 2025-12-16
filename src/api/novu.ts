@@ -43,7 +43,11 @@ function getNovuClient(): Novu {
     secretKey: API_KEY,
   };
 
-  if (API_URL) {
+  // In development, use the Vite proxy to avoid CORS issues
+  // In production, use the actual API URL
+  if (import.meta.env.DEV && typeof window !== 'undefined') {
+    options.serverURL = `${window.location.origin}/api/novu`;
+  } else if (API_URL) {
     options.serverURL = API_URL;
   }
 
